@@ -3,6 +3,7 @@ FROM ubuntu:bionic
 RUN    apt-get update        \
     && apt-get upgrade --yes \
     && apt-get install --yes \
+        curl                 \
         git
 
 ARG USER_ID=1000
