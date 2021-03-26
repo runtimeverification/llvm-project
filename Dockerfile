@@ -6,6 +6,7 @@ RUN    apt-get update        \
         cmake                \
         gcc-8                \
         g++-8                \
+        python3              \
         curl                 \
         git
 
