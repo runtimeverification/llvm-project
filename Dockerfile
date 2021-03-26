@@ -3,6 +3,9 @@ FROM ubuntu:bionic
 RUN    apt-get update        \
     && apt-get upgrade --yes \
     && apt-get install --yes \
+        cmake                \
+        gcc-9                \
+        g++-9                \
         curl                 \
         git
 
