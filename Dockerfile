@@ -4,8 +4,8 @@ RUN    apt-get update        \
     && apt-get upgrade --yes \
     && apt-get install --yes \
         cmake                \
-        gcc-9                \
-        g++-9                \
+        gcc-8                \
+        g++-8                \
         curl                 \
         git
 
