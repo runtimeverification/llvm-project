@@ -19,6 +19,8 @@ pipeline {
           mkdir install
           cd build
           cmake -G "Unix Makefiles"                  \
+                -DCMAKE_C_COMPILER=gcc-8             \
+                -DCMAKE_CXX_COMPILER=g++-8           \
                 -DLLVM_ENABLE_PROJECTS="clang"       \
                 -DCMAKE_INSTALL_PREFIX=../install    \
                 -DCMAKE_BUILD_TYPE=Debug             \
