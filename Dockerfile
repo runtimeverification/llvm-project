@@ -12,9 +12,14 @@ RUN    groupadd -g $GROUP_ID user                     \
 
 USER user:user
 
-RUN    chmod go-rwx -R /home/user/.ssh                                \
-    && git config --global user.email "admin@runtimeverification.com" \
-    && git config --global user.name  "RV Jenkins"                    \
+RUN curl -L https://github.com/github/hub/releases/download/v2.14.0/hub-linux-amd64-2.14.0.tgz -o /home/user/hub.tgz
+RUN cd /home/user && tar xzf hub.tgz
+
+ENV LD_LIBRARY_PATH=/usr/local/lib
+ENV PATH=/home/user/hub-linux-amd64-2.14.0/bin:$PATH
+
+RUN    git config --global user.email 'admin@runtimeverification.com' \
+    && git config --global user.name  'RV Jenkins'                    \
     && mkdir -p ~/.ssh                                                \
     && echo 'host github.com'                       > ~/.ssh/config   \
     && echo '    hostname github.com'              >> ~/.ssh/config   \
@@ -22,9 +27,3 @@ RUN    chmod go-rwx -R /home/user/.ssh                                \
     && echo '    identityagent SSH_AUTH_SOCK'      >> ~/.ssh/config   \
     && echo '    stricthostkeychecking accept-new' >> ~/.ssh/config   \
     && chmod go-rwx -R ~/.ssh
-
-RUN curl -L https://github.com/github/hub/releases/download/v2.14.0/hub-linux-amd64-2.14.0.tgz -o /home/user/hub.tgz
-RUN cd /home/user && tar xzf hub.tgz
-
-ENV LD_LIBRARY_PATH=/usr/local/lib
-ENV PATH=/home/user/hub-linux-amd64-2.14.0/bin:$PATH
