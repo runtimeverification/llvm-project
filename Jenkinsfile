@@ -25,7 +25,8 @@ pipeline {
                 -DCMAKE_INSTALL_PREFIX=../install    \
                 -DCMAKE_BUILD_TYPE=Debug             \
                 -DLLVM_TARGETS_TO_BUILD="X86" ../llvm
-          cmake --build . -j 2 --target install
+          make -j 2
+          make install
           cd ..
         '''
       }
