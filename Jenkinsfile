@@ -15,13 +15,16 @@ pipeline {
       options { timeout(time: 180, unit: 'MINUTES') }
       steps {
         sh '''
+          mkdir build
           mkdir install
-          cmake -S llvm -B build -G "Unix Makefiles" \
+          cd build
+          cmake -G "Unix Makefiles"                  \
                 -DLLVM_ENABLE_PROJECTS="clang"       \
                 -DCMAKE_INSTALL_PREFIX=../install    \
                 -DCMAKE_BUILD_TYPE=Debug             \
-                -DLLVM_TARGETS_TO_BUILD="X86"
-          cmake --build build -j 2 --target install
+                -DLLVM_TARGETS_TO_BUILD="X86" ../llvm
+          cmake --build . -j 2 --target install
+          cd ..
         '''
       }
     }
