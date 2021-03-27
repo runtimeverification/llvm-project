@@ -3,6 +3,12 @@ FROM ubuntu:bionic
 RUN    apt-get update        \
     && apt-get upgrade --yes \
     && apt-get install --yes \
+        cmake                \
+        make                 \
+        gcc-8                \
+        g++-8                \
+        clang-10             \
+        python3              \
         curl                 \
         git
 
