@@ -7,6 +7,7 @@ RUN    apt-get update        \
         make                 \
         gcc-8                \
         g++-8                \
+        clang-10             \
         python3              \
         curl                 \
         git
