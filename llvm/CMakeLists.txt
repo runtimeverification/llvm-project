@@ -308,6 +308,7 @@ set(LLVM_ALL_TARGETS
   AVR
   BPF
   Hexagon
+  IELE
   Lanai
   Mips
   MSP430

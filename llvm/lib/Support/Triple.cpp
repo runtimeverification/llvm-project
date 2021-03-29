@@ -72,6 +72,7 @@ StringRef Triple::getArchTypeName(ArchType Kind) {
   case ve:             return "ve";
   case wasm32:         return "wasm32";
   case wasm64:         return "wasm64";
+  case iele:           return "iele";
   case x86:            return "i386";
   case x86_64:         return "x86_64";
   case xcore:          return "xcore";
@@ -651,6 +652,7 @@ static StringRef getObjectFormatTypeName(Triple::ObjectFormatType Kind) {
   case Triple::ELF:   return "elf";
   case Triple::MachO: return "macho";
   case Triple::Wasm:  return "wasm";
+  case Triple::IELE:  return "iele";
   case Triple::XCOFF: return "xcoff";
   }
   llvm_unreachable("unknown object format type");
@@ -723,6 +725,9 @@ static Triple::ObjectFormatType getDefaultFormat(const Triple &T) {
   case Triple::wasm32:
   case Triple::wasm64:
     return Triple::Wasm;
+
+  case Triple::iele:
+    return Triple::IELE;
   }
   llvm_unreachable("unknown architecture");
 }
@@ -1294,6 +1299,7 @@ static unsigned getArchPointerBitWidth(llvm::Triple::ArchType Arch) {
   case llvm::Triple::systemz:
   case llvm::Triple::ve:
   case llvm::Triple::wasm64:
+  case llvm::Triple::iele:
   case llvm::Triple::x86_64:
     return 64;
   }
@@ -1324,6 +1330,7 @@ Triple Triple::get32BitArchVariant() const {
   case Triple::ppc64le:
   case Triple::systemz:
   case Triple::ve:
+  case Triple::iele:
     T.setArch(UnknownArch);
     break;
 
@@ -1393,6 +1400,7 @@ Triple Triple::get64BitArchVariant() const {
   case Triple::tce:
   case Triple::tcele:
   case Triple::xcore:
+  case Triple::iele:
     T.setArch(UnknownArch);
     break;
 

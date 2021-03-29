@@ -1,0 +1,18 @@
+;===--- ./lib/Target/IELE/MCTargetDesc/LLVMBuild.txt ---------*- Conf -*---===;
+;
+;===------------------------------------------------------------------------===;
+;
+; This is an LLVMBuild description file for the components in this subdirectory.
+;
+; For more information on the LLVMBuild system, please see:
+;
+;   http://llvm.org/docs/LLVMBuild.html
+;
+;===------------------------------------------------------------------------===;
+
+[component_0]
+type = Library
+name = IELEDesc
+parent = IELE
+required_libraries = MC Support IELEInfo
+add_to_library_groups = IELE

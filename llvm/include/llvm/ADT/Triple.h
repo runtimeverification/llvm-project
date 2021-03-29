@@ -95,6 +95,7 @@ public:
     lanai,          // Lanai: Lanai 32-bit
     wasm32,         // WebAssembly with 32-bit pointers
     wasm64,         // WebAssembly with 64-bit pointers
+    iele,           // IELE
     renderscript32, // 32-bit RenderScript
     renderscript64, // 64-bit RenderScript
     ve,             // NEC SX-Aurora Vector Engine
@@ -229,6 +230,7 @@ public:
     ELF,
     MachO,
     Wasm,
+    IELE,
     XCOFF,
   };
 
@@ -749,6 +751,11 @@ public:
   /// Tests whether the target is wasm (32- and 64-bit).
   bool isWasm() const {
     return getArch() == Triple::wasm32 || getArch() == Triple::wasm64;
+  }
+
+  /// Tests whether the target is iele.
+  bool isIELE() const {
+    return getArch() == Triple::iele;
   }
 
   /// Tests whether the target supports comdat

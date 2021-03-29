@@ -510,6 +510,9 @@ public:
         S = createWasmStreamer(Ctx, std::move(TAB), std::move(OW),
                                std::move(Emitter), RelaxAll);
       break;
+    case Triple::IELE:
+      //TODO: MCIELEStreamer 
+      break;
     case Triple::XCOFF:
       S = createXCOFFStreamer(Ctx, std::move(TAB), std::move(OW),
                               std::move(Emitter), RelaxAll);

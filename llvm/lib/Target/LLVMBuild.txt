@@ -25,6 +25,7 @@ subdirectories =
  AVR
  BPF
  Hexagon
+ IELE
  Lanai
  MSP430
  Mips

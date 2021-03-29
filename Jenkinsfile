@@ -18,15 +18,15 @@ pipeline {
           mkdir build
           mkdir install
           cd build
-          cmake ../llvm                           \
-                -G "Unix Makefiles"               \
-                -DCMAKE_C_COMPILER=gcc-8          \
-                -DCMAKE_CXX_COMPILER=g++-8        \
-                -DCMAKE_INSTALL_PREFIX=../install \
-                -DCMAKE_BUILD_TYPE=Debug          \
-                -DLLVM_TARGETS_TO_BUILD="X86"     \
+          cmake ../llvm                            \
+                -G "Unix Makefiles"                \
+                -DCMAKE_C_COMPILER=gcc-8           \
+                -DCMAKE_CXX_COMPILER=g++-8         \
+                -DCMAKE_INSTALL_PREFIX=../install  \
+                -DCMAKE_BUILD_TYPE=Debug           \
+                -DLLVM_TARGETS_TO_BUILD="X86;IELE" \
                # -DLLVM_ENABLE_PROJECTS="clang"
-          make -j 2
+          make -j 4
           make install
           cd ..
         '''

@@ -4733,6 +4733,9 @@ static const char *getSectionNameForBitcode(const Triple &T) {
   case Triple::XCOFF:
     llvm_unreachable("XCOFF is not yet implemented");
     break;
+  case Triple::IELE:
+    llvm_unreachable("IELE is not yet implemented");
+    break;
   }
   llvm_unreachable("Unimplemented ObjectFormatType");
 }
@@ -4748,6 +4751,9 @@ static const char *getSectionNameForCommandline(const Triple &T) {
     return ".llvmcmd";
   case Triple::XCOFF:
     llvm_unreachable("XCOFF is not yet implemented");
+    break;
+  case Triple::IELE:
+    llvm_unreachable("IELE is not yet implemented");
     break;
   }
   llvm_unreachable("Unimplemented ObjectFormatType");
