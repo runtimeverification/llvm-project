@@ -2,12 +2,15 @@
 //
 //===----------------------------------------------------------------------===//
 ///
-/// This file defines the WebAssembly-specific subclass of TargetMachine.
+/// This file defines the IELE-specific subclass of TargetMachine.
 ///
 //===----------------------------------------------------------------------===//
 
 #include "IELETargetMachine.h"
 #include "TargetInfo/IELETargetInfo.h"
+#include "IELE.h"
+#include "llvm/CodeGen/Passes.h"
+#include "llvm/CodeGen/TargetPassConfig.h"
 #include "llvm/Support/TargetRegistry.h"
 using namespace llvm;
 
@@ -21,7 +24,7 @@ extern "C" LLVM_EXTERNAL_VISIBILITY void LLVMInitializeIELETarget() {
 }
 
 //===----------------------------------------------------------------------===//
-// WebAssembly Lowering public interface.
+// IELE Lowering public interface.
 //===----------------------------------------------------------------------===//
 
 static Reloc::Model getEffectiveRelocModel(Optional<Reloc::Model> RM) {
@@ -33,7 +36,7 @@ static Reloc::Model getEffectiveRelocModel(Optional<Reloc::Model> RM) {
   return *RM;
 }
 
-/// Create an WebAssembly architecture model.
+/// Create an IELE architecture model.
 ///
 IELETargetMachine::IELETargetMachine(
     const Target &T, const Triple &TT, StringRef CPU, StringRef FS,
@@ -61,3 +64,85 @@ IELETargetMachine::IELETargetMachine(
 
 IELETargetMachine::~IELETargetMachine() = default; // anchor.
 
+namespace {
+
+/// IELE Code Generator Pass Configuration Options.
+class IELEPassConfig final : public TargetPassConfig {
+public:
+  IELEPassConfig(IELETargetMachine &TM, PassManagerBase &PM)
+      : TargetPassConfig(TM, PM) {}
+
+  IELETargetMachine &getIELETargetMachine() const {
+    return getTM<IELETargetMachine>();
+  }
+
+  FunctionPass *createTargetRegisterAllocator(bool) override;
+
+  void addIRPasses() override;
+  bool addInstSelector() override;
+  void addPostRegAlloc() override;
+  bool addGCPasses() override { return false; }
+  void addPreEmitPass() override;
+
+  // No reg alloc
+  bool addRegAssignmentFast() override { return false; }
+
+  // No reg alloc
+  bool addRegAssignmentOptimized() override { return false; }
+};
+
+} // end anonymous namespace
+
+TargetPassConfig *
+IELETargetMachine::createPassConfig(PassManagerBase &PM) {
+  return new IELEPassConfig(*this, PM);
+}
+
+FunctionPass *IELEPassConfig::createTargetRegisterAllocator(bool) {
+  return nullptr; // No reg alloc
+}
+
+//===----------------------------------------------------------------------===//
+// The following functions are called from lib/CodeGen/Passes.cpp to modify
+// the CodeGen pass sequence.
+//===----------------------------------------------------------------------===//
+
+void IELEPassConfig::addIRPasses() {
+  // This is a no-op if atomics are not used in the module
+  addPass(createAtomicExpandPass());
+
+  // Expand indirectbr instructions to switches.
+  addPass(createIndirectBrExpandPass());
+
+  TargetPassConfig::addIRPasses();
+}
+
+bool IELEPassConfig::addInstSelector() {
+  (void)TargetPassConfig::addInstSelector();
+  addPass(
+      createIELEISelDag(getIELETargetMachine(), getOptLevel()));
+
+  return false;
+}
+
+void IELEPassConfig::addPostRegAlloc() {
+  // From WebAssembly: The following CodeGen passes don't support code
+  // containing virtual registers.
+
+  // These functions all require the NoVRegs property.
+  disablePass(&MachineCopyPropagationID);
+  disablePass(&PostRAMachineSinkingID);
+  disablePass(&PostRASchedulerID);
+  disablePass(&FuncletLayoutID);
+  disablePass(&StackMapLivenessID);
+  disablePass(&LiveDebugValuesID);
+  disablePass(&PatchableFunctionID);
+  disablePass(&ShrinkWrapID);
+
+  TargetPassConfig::addPostRegAlloc();
+}
+
+void IELEPassConfig::addPreEmitPass() {
+  TargetPassConfig::addPreEmitPass();
+
+}

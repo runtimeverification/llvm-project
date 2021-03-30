@@ -24,6 +24,9 @@ public:
 
   ~IELETargetMachine() override;
 
+  // Pass Pipeline Configuration
+  TargetPassConfig *createPassConfig(PassManagerBase &PM) override;
+
   bool usesPhysRegsForValues() const override { return false; }
 
 };
