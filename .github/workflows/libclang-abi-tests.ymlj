@@ -37,13 +37,13 @@ jobs:
         id: vars
         run: |
           if [ ${{ steps.version.outputs.LLVM_VERSION_MINOR }} -ne 0 -o ${{ steps.version.outputs.LLVM_VERSION_PATCH }} -eq 0 ]; then
-            echo ::set-output name=BASELINE_VERSION_MAJOR::$(( ${{ steps.version.outputs.LLVM_VERSION_MAJOR }} - 1))
-            echo ::set-output name=ABI_HEADERS::clang-c
-            echo ::set-output name=ABI_LIBS::libclang.so
+            echo echo "BASELINE_VERSION_MAJOR=$(( ${{ steps.version.outputs.LLVM_VERSION_MAJOR }} - 1)) >> $GITHUB_OUTPUT
+            echo "ABI_HEADERS=clang-c" >> $GITHUB_OUTPUT
+            echo "ABI_LIBS=libclang.so" >> $GITHUB_OUTPUT
           else
-            echo ::set-output name=BASELINE_VERSION_MAJOR::${{ steps.version.outputs.LLVM_VERSION_MAJOR }}
-            echo ::set-output name=ABI_HEADERS::.
-            echo ::set-output name=ABI_LIBS::libclang.so libclang-cpp.so
+            echo "BASELINE_VERSION_MAJOR=${{ steps.version.outputs.LLVM_VERSION_MAJOR }} >> $GITHUB_OUTPUT
+            echo "ABI_HEADERS=." >> $GITHUB_OUTPUT
+            echo "ABI_LIBS=libclang.so libclang-cpp.so" >> $GITHUB_OUTPUT
           fi
 
   abi-dump:
